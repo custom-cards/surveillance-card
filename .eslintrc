@@ -1,0 +1,23 @@
+{
+  "env": {
+    "browser": true
+  },
+  "extends": "airbnb-base",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
+  },
+  "rules": {
+    "comma-dangle": 0,
+    "import/no-unresolved": 0,
+    "no-underscore-dangle": 0,
+    "no-restricted-syntax": [
+      0,
+      "ForOfStatement"
+    ]
+  }
+}
