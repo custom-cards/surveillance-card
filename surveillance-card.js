@@ -1,14 +1,12 @@
 import {
   LitElement, html
-} from 'https://unpkg.com/@polymer/lit-element@^0.5.2/lit-element.js?module';
-
-import { repeat } from 'https://unpkg.com/lit-html@0.10.2/lib/repeat.js?module';
+} from 'https://unpkg.com/lit-element@2.3.1/lit-element.js?module';
 
 class SurveillanceCard extends LitElement {
   /* eslint-disable indent,object-curly-newline */
-  _render({ imageSources, currentCamera, lastMotion, updateInterval }) {
-    const accessToken = currentCamera && this._hass.states[currentCamera].attributes.access_token;
-    const template = html`
+  render() {
+    const accessToken = this.currentCamera && this._hass.states[this.currentCamera] && this._hass.states[this.currentCamera].attributes.access_token;
+    return html`
     <style>
       .container {
         height: 100%;
@@ -70,35 +68,33 @@ class SurveillanceCard extends LitElement {
     </style>
     <div class="container">
       <div class="thumbs">
-        ${imageSources ? repeat(this.cameras, (camera) => {
-          const thumbClass = lastMotion && lastMotion === camera.motion ? 'thumb motion' : 'thumb';
-          const source = this.imageSources[camera.entity];
-          return html`
-            <div class$="${thumbClass}" on-click="${() => { this.currentCamera = camera.entity; }}">
-              <img src="${source || ''}" />
+        ${this.imageSources ? this.cameras.map((camera) => {
+      const thumbClass = this.lastMotion && this.lastMotion === camera.motion ? 'thumb motion' : 'thumb';
+      const source = this.imageSources[camera.entity] || '';
+      return html`
+            <div class="${thumbClass}" @click="${() => { this.currentCamera = camera.entity; }}">
+              <img src="${source}" />
             </div>
           `;
-        }) : html`<div class="loading">Loading Cameras...</div>`}
+    }) : html`<div class="loading">Loading Cameras...</div>`}
       </div>
       <div class="mainImage">
-        <img src$="${currentCamera ? `/api/camera_proxy_stream/${currentCamera}?token=${accessToken}&interval=${updateInterval}` : ''}" />
+        <img src="${this.currentCamera ? `/api/camera_proxy_stream/${this.currentCamera}?token=${accessToken}&interval=${this.updateInterval}` : ''}" />
       </div>
     </div>
     `;
-
-    return template;
   }
   /* eslint-enable indent,object-curly-newline */
 
   static get properties() {
     return {
-      _hass: Object,
-      cameras: Array,
-      currentCamera: String,
-      imageSources: Object,
-      lastMotion: String,
-      thumbInterval: Number,
-      updateInterval: Number
+      _hass: { type: Object },
+      cameras: { type: Array },
+      currentCamera: { type: String },
+      imageSources: { type: Object },
+      lastMotion: { type: String },
+      thumbInterval: { type: Number },
+      updateInterval: { type: Number }
     };
   }
 
@@ -116,11 +112,11 @@ class SurveillanceCard extends LitElement {
   set hass(hass) {
     this._hass = hass;
 
-    for (const cam of this.cameras) {
-      const { motion } = cam;
+    for (const camera of this.cameras) {
+      const { motion } = camera;
       if ((motion in hass.states) && hass.states[motion].state === 'on') {
         if (this.focusMotion && this.lastMotion !== motion) {
-          this.currentCamera = cam.entity;
+          this.currentCamera = camera.entity;
         }
         this.lastMotion = motion;
         return;
