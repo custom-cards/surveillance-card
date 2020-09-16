@@ -37,7 +37,8 @@ class SurveillanceCard extends LitElement {
       selectedCamera: { type: Object },
       focusOnMotion: { type: Boolean },
       thumbInterval: { type: Number },
-      updateInterval: { type: Number }
+      updateInterval: { type: Number },
+      focusInterval: { type: Number }
     };
   }
 
@@ -68,6 +69,7 @@ class SurveillanceCard extends LitElement {
     this.focusOnMotion = config.focus_motion !== false;
     this.thumbInterval = (config.thumb_interval || 10.0) * 1000;
     this.updateInterval = config.update_interval || 1.0;
+    this.focusInterval = (config.focus_interval || 0) * 1000;
 
     const now = Date.now();
     this.cameras = config.cameras.map((camera) => {
@@ -137,6 +139,21 @@ class SurveillanceCard extends LitElement {
     if (this.selectedCamera !== camera) {
       this.selectedCamera = camera;
     }
+
+    if (this.focusInterval >= 10000) {
+      setTimeout(() => { this._nextCamera() }, this.focusInterval);
+    }
+  }
+
+  _nextCamera() {
+    let current_index = this.cameras.indexOf(this.selectedCamera);
+    let next_index = current_index + 1;
+    
+    if (next_index >= this.cameras.length) {
+      next_index = 0;
+    }
+
+    this._updateSelectedCamera(this.cameras[next_index]);
   }
 
   _cameraSortComparer(cameraA, cameraB) {
@@ -162,7 +179,6 @@ class SurveillanceCard extends LitElement {
         width: 100%;
         display: flex;
         align-items: stretch;
-        position: absolute;
       }
 
       .thumbs {

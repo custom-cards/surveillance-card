@@ -10,6 +10,7 @@ Custom component for lovelace to be used as a panel for viewing security cameras
 | cameras | list | _See camera section below_ | **Required**
 | thumb_interval | number | Update interval for thumbnails in seconds (_min_ 0.5) | 10
 | update_interval | number | Update interval for main image in seconds (_min_ 0.5) | 1
+| focus_interval | number | Update interval for automatic transition to next camera in seconds (_min_ 10) | 0
 | focus_motion | boolean | Switch to camera when motion detected | true
 
 ### Camera configuration
