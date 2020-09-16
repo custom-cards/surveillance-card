@@ -129,7 +129,11 @@ class SurveillanceCard extends LitElement {
     this.cameras = [...this.cameras];
   }
 
-  _updateSelectedCamera(camera) {
+  _updateSelectedCamera(camera, autochanged = false) {
+    if (!autochanged) {
+      clearTimeout(this.autochangeTimer);
+    }
+
     if (!camera || !camera.access_token) {
       let availableCameras = this.cameras.filter((c) => c.access_token && c.has_motion);
       availableCameras.sort(this._cameraSortComparer);
@@ -141,7 +145,7 @@ class SurveillanceCard extends LitElement {
     }
 
     if (this.focusInterval >= 10000) {
-      setTimeout(() => { this._nextCamera() }, this.focusInterval);
+      this.autochangeTimer = setTimeout(() => { this._nextCamera() }, this.focusInterval);
     }
   }
 
@@ -153,7 +157,7 @@ class SurveillanceCard extends LitElement {
       next_index = 0;
     }
 
-    this._updateSelectedCamera(this.cameras[next_index]);
+    this._updateSelectedCamera(this.cameras[next_index], true);
   }
 
   _cameraSortComparer(cameraA, cameraB) {
