@@ -112,11 +112,11 @@ class SurveillanceCard extends LitElement {
         camera.last_update = now;
       }
 
-      camera.stream_url = `/api/camera_proxy_stream/${camera.entity}?token=${camera.access_token}&interval=${this.updateInterval}`;
       const attributes = camera.entity in states ? states[camera.entity].attributes || {} : {};
       camera.access_token = attributes.access_token;
       camera.name = attributes.friendly_name;
       camera.url = `${attributes.entity_picture}&last_update=${camera.last_update}`;
+      camera.stream_url = `/api/camera_proxy_stream/${camera.entity}?token=${camera.access_token}&interval=${this.updateInterval}`;
     }
 
     if (this.focusOnMotion && activatedCameras.length > 0) {
