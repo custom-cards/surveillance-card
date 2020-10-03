@@ -1,4 +1,6 @@
-Custom component for lovelace to be used as a panel for viewing security cameras.
+Custom component for lovelace to be used as a panel for viewing security cameras. It shows all of the cameras on the left, and shows a big one with motion on the right.
+![Screenshot](/surveillancecard.png)
+
 
 **Note: When including this file in your `ui-lovelace.yaml` you must use `type: module`**
 
