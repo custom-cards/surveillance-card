@@ -22,7 +22,7 @@ class SurveillanceCard extends LitElement {
                 </div>
                 <div class="toolbar">
                   <a target="_blank" class="snapshot" href="${camera.url}" download="${camera.name.replace(' ','_')+"_"+ new Date().toISOString()+".jpg"}"></a>
-                  <a class="record"></a>
+                  <a class="record" @click="${(clickEvent) => this._recordSequence(clickEvent)}"></a>
                 </div>
               `;
             })}
@@ -72,6 +72,7 @@ class SurveillanceCard extends LitElement {
     this.focusOnMotion = config.focus_motion !== false;
     this.thumbInterval = (config.thumb_interval || 10.0) * 1000;
     this.updateInterval = config.update_interval || 1.0;
+    this.recordingDuration = config.recording_duration || 10.0;
 
     const now = Date.now();
     this.cameras = config.cameras.map((camera) => {
@@ -157,6 +158,26 @@ class SurveillanceCard extends LitElement {
 
       return cameraA.last_update === cameraB.last_update ? 0 : -1;
     }
+  }
+
+  _recordSequence(clickEvent){
+    let currentThumbSnapshotBtn = clickEvent.srcElement.previousElementSibling;
+
+    let totalSnapshots = this.recordingDuration/(this.thumbInterval/1000);
+    let snapshotCount = 1;
+
+    currentThumbSnapshotBtn.click();
+
+    let snapshotInterval = setInterval(function(){
+      currentThumbSnapshotBtn.click();
+      snapshotCount++;
+
+      if (snapshotCount>=totalSnapshots) {
+        clearInterval(snapshotInterval);
+
+      }
+    
+    }, this.thumbInterval);
   }
 
   static get styles() {
