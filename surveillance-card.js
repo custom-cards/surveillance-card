@@ -20,6 +20,10 @@ class SurveillanceCard extends LitElement {
                 <div class="${thumbClass}" @click="${() => this._updateSelectedCamera(camera)}">
                   <img src="${camera.url}" alt="${camera.name}" />
                 </div>
+                <div class="toolbar">
+                  <a target="_blank" class="snapshot" href="${camera.url}" download="snapshot.jpg"}"></a>
+                  <a class="record"></a>
+                </div>
               `;
             })}
         </div>
@@ -169,6 +173,7 @@ class SurveillanceCard extends LitElement {
         flex: 1;
         overflow-y: auto;
         position: relative;
+        text-align:center;
       }
 
       .thumb > img {
@@ -213,6 +218,34 @@ class SurveillanceCard extends LitElement {
         font-size: 1.2rem;
         margin-top: 3rem;
       }
+
+      .toolbar{
+        overflow: hidden;
+        position: relative;
+        left: 50%;
+        margin-left: -65px;
+        width: 130px;
+        height: 60px;
+        bottom: 67px;
+        margin-bottom: -60px;
+      }
+
+      .snapshot{
+        width: 60px;
+        height: 60px;
+        background-color: blue;
+        cursor:pointer;
+        display:inline-block;
+      }
+
+      .record{
+        width: 60px;
+        height: 60px;
+        background-color: red;
+        cursor:pointer;
+        display:inline-block;
+      }
+      
     `;
   }
 
