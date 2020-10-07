@@ -29,7 +29,7 @@ Each entry in the camera list takes the following options
 
 ### Step 1
 
-Install `surveillance-card` by copying `surveillance-card.js`, 'record.svg', and 'snapshot.svg' from this repo to `<config directory>/www/surveillance-card/` on your Home Assistant instance.
+Install `surveillance-card` by copying `surveillance-card.js`, `record.svg`, and `snapshot.svg` from this repo to `<config directory>/www/surveillance-card/` on your Home Assistant instance.
 
 **Example:**
 
