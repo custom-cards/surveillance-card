@@ -9,7 +9,6 @@ class SurveillanceCard extends LitElement {
     if (!this.cameras) {
       return html`<div class="loading">Loading Cameras...</div>`;
     }
-
     return html`
       <div class="container">
         <div class="thumbs">
