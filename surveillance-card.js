@@ -15,12 +15,13 @@ class SurveillanceCard extends LitElement {
         <div class="thumbs">
           ${this.cameras.filter((c) => c.access_token).map((camera) => {
               let thumbClass = camera.has_motion ? "thumb motion" : "thumb";
+              let toolbarClass = this.showCaptureButtons ? "" : "hidden";
 
               return html`
                 <div class="${thumbClass}" @click="${() => this._updateSelectedCamera(camera)}">
                   <img src="${camera.url}" alt="${camera.name}" />
                 </div>
-                <div class="toolbar">
+                <div class="toolbar ${toolbarClass}" >
                   <a target="_blank" class="snapshot" href="${camera.url}" download="${camera.name.replace(' ','_')+"_"+ new Date().toISOString()+".jpg"}"></a>
                   <a class="record" @click="${(clickEvent) => this._recordSequence(clickEvent)}"></a>
                 </div>
@@ -41,7 +42,9 @@ class SurveillanceCard extends LitElement {
       selectedCamera: { type: Object },
       focusOnMotion: { type: Boolean },
       thumbInterval: { type: Number },
-      updateInterval: { type: Number }
+      updateInterval: { type: Number },
+      recordingDuration: { type: Number },
+      showCaptureButtons: { type: Boolean }
     };
   }
 
@@ -73,6 +76,7 @@ class SurveillanceCard extends LitElement {
     this.thumbInterval = (config.thumb_interval || 10.0) * 1000;
     this.updateInterval = config.update_interval || 1.0;
     this.recordingDuration = config.recording_duration || 10.0;
+    this.showCaptureButtons = config.show_capture_buttons !== false;
 
     const now = Date.now();
     this.cameras = config.cameras.map((camera) => {
@@ -205,6 +209,7 @@ class SurveillanceCard extends LitElement {
         height: auto;
         min-height: 22px;
         border: 1px solid var(--primary-color);
+        min-height:75px;
       }
 
       .thumb {
@@ -267,7 +272,6 @@ class SurveillanceCard extends LitElement {
         border-radius:60px;
         cursor:pointer;
         border: 1px solid var(--primary-color);
-
       }
 
       .record{
@@ -283,11 +287,14 @@ class SurveillanceCard extends LitElement {
         border-radius:60px;
         cursor:pointer;
         border: 1px solid var(--primary-color);
-
       }
 
       .recording img{
         border: 3px solid var(--primary-color);
+      }
+
+      .hidden{
+        display:none;
       }
 
     `;
