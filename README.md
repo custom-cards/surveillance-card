@@ -12,6 +12,8 @@ Custom component for lovelace to be used as a panel for viewing security cameras
 | cameras | list | _See camera section below_ | **Required**
 | thumb_interval | number | Update interval for thumbnails in seconds (_min_ 0.5) | 10
 | update_interval | number | Update interval for main image in seconds (_min_ 0.5) | 1
+| show_capture_buttons | boolean | Show screenshot and record buttons | true
+| recording_duration | number | Number of seconds to record after clicking record button (_min_ 0.5) | 10
 | focus_motion | boolean | Switch to camera when motion detected | true
 
 ### Camera configuration
@@ -27,13 +29,17 @@ Each entry in the camera list takes the following options
 
 ### Step 1
 
-Install `surveillance-card` by copying `surveillance-card.js`from this repo to `<config directory>/www/` on your Home Assistant instance.
+Install `surveillance-card` by copying `surveillance-card.js`, 'record.svg', and 'snapshot.svg' from this repo to `<config directory>/www/surveillance-card/` on your Home Assistant instance.
 
 **Example:**
 
 ```bash
 wget https://raw.githubusercontent.com/custom-cards/surveillance-card/master/surveillance-card.js
-mv surveillance-card.js /config/www/
+wget https://raw.githubusercontent.com/custom-cards/surveillance-card/master/record.svg
+wget https://raw.githubusercontent.com/custom-cards/surveillance-card/master/snapshot.svg
+
+mkdir /config/www/surveillance-card
+mv -t /config/www/surveillance-card surveillance-card.js record.svg snapshot.svg
 ```
 
 ### Step 2
@@ -60,6 +66,8 @@ views:
       - type: custom:surveillance-card
         thumb_interval: 15
         update_interval: 2
+        recording_duration: 10
+        show_capture_buttons: true
         cameras:
           - entity: camera.front_porch
             motion_entity: binary_sensor.front_porch_motion

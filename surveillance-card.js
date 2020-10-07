@@ -9,6 +9,16 @@ class SurveillanceCard extends LitElement {
     if (!this.cameras) {
       return html`<div class="loading">Loading Cameras...</div>`;
     }
+
+    const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+    let screenSizeClass = "";
+
+    if (screenWidth<520) screenSizeClass = "tinyScreen";
+    else if(screenWidth<1000) screenSizeClass = "smallScreen";
+
+    // Capture functionality not available in HA iOS and Android apps
+    const showToolbarClass = ( !this.isMobileApp && this.showCaptureButtons ) ? "" : "hidden";
+
     return html`
       <div class="container">
         <div class="thumbs">
@@ -20,7 +30,7 @@ class SurveillanceCard extends LitElement {
                 <div class="${thumbClass}" @click="${() => this._updateSelectedCamera(camera)}">
                   <img src="${camera.url}" alt="${camera.name}" />
                 </div>
-                <div class="toolbar ${toolbarClass}" >
+                <div class="toolbar ${showToolbarClass} ${screenSizeClass}" >
                   <a target="_blank" class="snapshot" href="${camera.url}" download="${camera.name.replace(' ','_')+"_"+ new Date().toISOString()+".jpg"}"></a>
                   <a class="record" @click="${(clickEvent) => this._recordSequence(clickEvent)}"></a>
                 </div>
@@ -76,6 +86,10 @@ class SurveillanceCard extends LitElement {
     this.updateInterval = config.update_interval || 1.0;
     this.recordingDuration = config.recording_duration || 10.0;
     this.showCaptureButtons = config.show_capture_buttons !== false;
+
+    // There must be better way to tell if HA front end running from app or browser
+    // Confirmed working on iOS, should be verified on Android app
+    this.isMobileApp = navigator.userAgent.indexOf("HomeAssistant") > -1;
 
     const now = Date.now();
     this.cameras = config.cameras.map((camera) => {
@@ -177,10 +191,9 @@ class SurveillanceCard extends LitElement {
       currentThumbSnapshotBtn.click();
       snapshotCount++;
 
-      if (snapshotCount>=totalSnapshots) {
+      if (snapshotCount>totalSnapshots) {
         cameraThumbContainer.classList.remove("recording");
         clearInterval(snapshotInterval);
-
       }
     
     }, this.thumbInterval);
@@ -258,6 +271,21 @@ class SurveillanceCard extends LitElement {
         margin-bottom: -62px;
       }
 
+      .toolbar.smallScreen{
+        bottom: 30px;
+        width: auto;
+        left: auto;
+        margin: 0px 0px -30px;
+      }
+
+      .toolbar.tinyScreen{
+        bottom: 0;
+        height: 150px;
+        width: auto;
+        margin: 6px 0;
+        left:0;
+      }
+
       .snapshot{
         width: 60px;
         height: 60px;
@@ -286,6 +314,12 @@ class SurveillanceCard extends LitElement {
         border-radius:60px;
         cursor:pointer;
         border: 1px solid var(--primary-color);
+      }
+
+      .smallScreen .record, .smallScreen .snapshot{
+        width:50px;
+        height:50px;
+        opacity: 1;
       }
 
       .recording img{
