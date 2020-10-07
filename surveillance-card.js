@@ -162,17 +162,20 @@ class SurveillanceCard extends LitElement {
 
   _recordSequence(clickEvent){
     let currentThumbSnapshotBtn = clickEvent.srcElement.previousElementSibling;
+    let cameraThumbContainer = clickEvent.srcElement.parentElement.previousElementSibling;
 
     let totalSnapshots = this.recordingDuration/(this.thumbInterval/1000);
     let snapshotCount = 1;
 
     currentThumbSnapshotBtn.click();
+    cameraThumbContainer.classList.add("recording");
 
     let snapshotInterval = setInterval(function(){
       currentThumbSnapshotBtn.click();
       snapshotCount++;
 
       if (snapshotCount>=totalSnapshots) {
+        cameraThumbContainer.classList.remove("recording");
         clearInterval(snapshotInterval);
 
       }
@@ -246,25 +249,45 @@ class SurveillanceCard extends LitElement {
         left: 50%;
         margin-left: -65px;
         width: 130px;
-        height: 60px;
-        bottom: 67px;
-        margin-bottom: -60px;
+        height: 62px;
+        bottom: 70px;
+        margin-bottom: -62px;
       }
 
       .snapshot{
         width: 60px;
         height: 60px;
-        background-color: blue;
+        background-image: url(/local/surveillance-card/snapshot.svg);
+        display: inline-block;
+        background-repeat: no-repeat;
+        background-size: 60% 60%;
+        background-position: 50% 50%;
+        opacity: 0.8;
+        background-color: rgb(51, 51, 51);
+        border-radius:60px;
         cursor:pointer;
-        display:inline-block;
+        border: 1px solid var(--primary-color);
+
       }
 
       .record{
         width: 60px;
         height: 60px;
-        background-color: red;
+        background-image: url(/local/surveillance-card/record.svg);
+        display: inline-block;
+        background-repeat: no-repeat;
+        background-size: 60% 60%;
+        background-position: 50% 50%;
+        opacity: 0.8;
+        background-color: rgb(51, 51, 51);
+        border-radius:60px;
         cursor:pointer;
-        display:inline-block;
+        border: 1px solid var(--primary-color);
+
+      }
+
+      .recording img{
+        border: 3px solid var(--primary-color);
       }
 
     `;
