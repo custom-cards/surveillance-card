@@ -34,12 +34,12 @@ Install `surveillance-card` by copying `surveillance-card.js`, 'record.svg', and
 **Example:**
 
 ```bash
+mkdir <config directory>/www/surveillance-card/
+cd <config directory>/www/surveillance-card/
+
 wget https://raw.githubusercontent.com/custom-cards/surveillance-card/master/surveillance-card.js
 wget https://raw.githubusercontent.com/custom-cards/surveillance-card/master/record.svg
 wget https://raw.githubusercontent.com/custom-cards/surveillance-card/master/snapshot.svg
-
-mkdir /config/www/surveillance-card
-mv -t /config/www/surveillance-card surveillance-card.js record.svg snapshot.svg
 ```
 
 ### Step 2
@@ -75,3 +75,11 @@ views:
             motion_entity: binary_sensor.back_yard_motion
           - entity: camera.driveway
 ```
+
+## Saving Snapshots from Cameras
+
+Clicking on the *camera button* will save a single snapshot from that camera.
+
+Clicking the *record button* will grab as many images as it can (based on the update intervals) for the set `recording_duration`
+
+Note: This functionality is not available in native app versions (iOS & Android) and depends on the browser/device's ability to download image files.
