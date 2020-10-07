@@ -21,7 +21,7 @@ class SurveillanceCard extends LitElement {
                   <img src="${camera.url}" alt="${camera.name}" />
                 </div>
                 <div class="toolbar">
-                  <a target="_blank" class="snapshot" href="${camera.url}" download="snapshot.jpg"}"></a>
+                  <a target="_blank" class="snapshot" href="${camera.url}" download="${camera.name.replace(' ','_')+"_"+ new Date().toISOString()+".jpg"}"></a>
                   <a class="record"></a>
                 </div>
               `;
@@ -245,7 +245,7 @@ class SurveillanceCard extends LitElement {
         cursor:pointer;
         display:inline-block;
       }
-      
+
     `;
   }
 
