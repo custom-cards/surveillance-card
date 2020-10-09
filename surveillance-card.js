@@ -221,7 +221,7 @@ class SurveillanceCard extends LitElement {
         height: auto;
         min-height: 22px;
         border: 1px solid var(--primary-color);
-        min-height:75px;
+        min-height:91px;
       }
 
       .thumb {
@@ -265,9 +265,9 @@ class SurveillanceCard extends LitElement {
         position: relative;
         left: 50%;
         margin-left: -65px;
-        width: 130px;
+        width: 132px;
         height: 62px;
-        bottom: 70px;
+        bottom: 78px;
         margin-bottom: -62px;
       }
 
@@ -299,8 +299,9 @@ class SurveillanceCard extends LitElement {
         border-radius:60px;
         cursor:pointer;
         border: 1px solid var(--primary-color);
+        margin-right:4px;
       }
-
+      
       .record{
         width: 60px;
         height: 60px;
