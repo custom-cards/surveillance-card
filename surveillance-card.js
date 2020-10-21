@@ -10,15 +10,29 @@ class SurveillanceCard extends LitElement {
       return html`<div class="loading">Loading Cameras...</div>`;
     }
 
+    const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+    let screenSizeClass = "";
+
+    if (screenWidth<520) screenSizeClass = "tinyScreen";
+    else if(screenWidth<1000) screenSizeClass = "smallScreen";
+
+    // Capture functionality not available in HA iOS and Android apps
+    const showToolbarClass = ( !this.isMobileApp && this.showCaptureButtons ) ? "" : "hidden";
+
     return html`
       <div class="container">
         <div class="thumbs">
           ${this.cameras.filter((c) => c.access_token).map((camera) => {
               let thumbClass = camera.has_motion ? "thumb motion" : "thumb";
+              let toolbarClass = this.showCaptureButtons ? "" : "hidden";
 
               return html`
                 <div class="${thumbClass}" @click="${() => this._updateSelectedCamera(camera)}">
                   <img src="${camera.url}" alt="${camera.name}" />
+                </div>
+                <div class="toolbar ${showToolbarClass} ${screenSizeClass}" >
+                  <a target="_blank" class="snapshot" href="${camera.url}" download="${camera.name.replace(' ','_')+"_"+ new Date().toISOString()+".jpg"}"></a>
+                  <a class="record" @click="${(clickEvent) => this._recordSequence(clickEvent)}"></a>
                 </div>
               `;
             })}
@@ -37,7 +51,9 @@ class SurveillanceCard extends LitElement {
       selectedCamera: { type: Object },
       focusOnMotion: { type: Boolean },
       thumbInterval: { type: Number },
-      updateInterval: { type: Number }
+      updateInterval: { type: Number },
+      recordingDuration: { type: Number },
+      showCaptureButtons: { type: Boolean }
     };
   }
 
@@ -68,6 +84,12 @@ class SurveillanceCard extends LitElement {
     this.focusOnMotion = config.focus_motion !== false;
     this.thumbInterval = (config.thumb_interval || 10.0) * 1000;
     this.updateInterval = config.update_interval || 1.0;
+    this.recordingDuration = config.recording_duration || 10.0;
+    this.showCaptureButtons = config.show_capture_buttons !== false;
+
+    // There must be better way to tell if HA front end running from app or browser
+    // Confirmed working on iOS, should be verified on Android app
+    this.isMobileApp = navigator.userAgent.indexOf("HomeAssistant") > -1;
 
     const now = Date.now();
     this.cameras = config.cameras.map((camera) => {
@@ -155,6 +177,28 @@ class SurveillanceCard extends LitElement {
     }
   }
 
+  _recordSequence(clickEvent){
+    let currentThumbSnapshotBtn = clickEvent.srcElement.previousElementSibling;
+    let cameraThumbContainer = clickEvent.srcElement.parentElement.previousElementSibling;
+
+    let totalSnapshots = this.recordingDuration/(this.thumbInterval/1000);
+    let snapshotCount = 1;
+
+    currentThumbSnapshotBtn.click();
+    cameraThumbContainer.classList.add("recording");
+
+    let snapshotInterval = setInterval(function(){
+      currentThumbSnapshotBtn.click();
+      snapshotCount++;
+
+      if (snapshotCount>totalSnapshots) {
+        cameraThumbContainer.classList.remove("recording");
+        clearInterval(snapshotInterval);
+      }
+    
+    }, this.thumbInterval);
+  }
+
   static get styles() {
     return css`
       .container {
@@ -169,6 +213,7 @@ class SurveillanceCard extends LitElement {
         flex: 1;
         overflow-y: auto;
         position: relative;
+        text-align:center;
       }
 
       .thumb > img {
@@ -176,6 +221,7 @@ class SurveillanceCard extends LitElement {
         height: auto;
         min-height: 22px;
         border: 1px solid var(--primary-color);
+        min-height:91px;
       }
 
       .thumb {
@@ -213,6 +259,78 @@ class SurveillanceCard extends LitElement {
         font-size: 1.2rem;
         margin-top: 3rem;
       }
+
+      .toolbar{
+        overflow: hidden;
+        position: relative;
+        left: 50%;
+        margin-left: -65px;
+        width: 132px;
+        height: 62px;
+        bottom: 78px;
+        margin-bottom: -62px;
+      }
+
+      .toolbar.smallScreen{
+        bottom: 30px;
+        width: auto;
+        left: auto;
+        margin: 0px 0px -30px;
+      }
+
+      .toolbar.tinyScreen{
+        bottom: 0;
+        height: 150px;
+        width: auto;
+        margin: 6px 0;
+        left:0;
+      }
+
+      .snapshot{
+        width: 60px;
+        height: 60px;
+        background-image: url(/local/surveillance-card/snapshot.svg);
+        display: inline-block;
+        background-repeat: no-repeat;
+        background-size: 60% 60%;
+        background-position: 50% 50%;
+        opacity: 0.8;
+        background-color: rgb(51, 51, 51);
+        border-radius:60px;
+        cursor:pointer;
+        border: 1px solid var(--primary-color);
+        margin-right:4px;
+      }
+      
+      .record{
+        width: 60px;
+        height: 60px;
+        background-image: url(/local/surveillance-card/record.svg);
+        display: inline-block;
+        background-repeat: no-repeat;
+        background-size: 60% 60%;
+        background-position: 50% 50%;
+        opacity: 0.8;
+        background-color: rgb(51, 51, 51);
+        border-radius:60px;
+        cursor:pointer;
+        border: 1px solid var(--primary-color);
+      }
+
+      .smallScreen .record, .smallScreen .snapshot{
+        width:50px;
+        height:50px;
+        opacity: 1;
+      }
+
+      .recording img{
+        border: 3px solid var(--primary-color);
+      }
+
+      .hidden{
+        display:none;
+      }
+
     `;
   }
 
