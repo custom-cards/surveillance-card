@@ -83,3 +83,10 @@ Clicking on the *camera button* will save a single snapshot from that camera.
 Clicking the *record button* will grab as many images as it can (based on the update intervals) for the set `recording_duration`
 
 Note: This functionality is not available in native app versions (iOS & Android) and depends on the browser/device's ability to download image files.
+
+
+## Thanks
+
+Thanks to all the people who have contributed!
+
+[![contributors](https://contributors-img.web.app/image?repo=custom-cards/surveillance-card)](https://github.com/custom-cards/surveillance-card/graphs/contributors)
