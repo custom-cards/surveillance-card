@@ -38,10 +38,28 @@ class SurveillanceCard extends LitElement {
             })}
         </div>
         <div class="mainImage">
-          <img src="${this.selectedCamera.stream_url}" alt="${this.selectedCamera.name}" />
+          ${this.renderMain()}
         </div>
       </div>
     `;
+  }
+
+  renderMain() {
+    if (this.liveStream) {
+      const cameraObj = this.hass.states[this.selectedCamera.entity];
+      if (!cameraObj) {
+        return html``;
+      }
+      
+      return html`
+        <ha-camera-stream
+          .hass=${this.hass}
+          .stateObj="${cameraObj}"
+        ></ha-camera-stream>
+      `;
+    }
+    
+    return html`<img src="${this.selectedCamera.stream_url}" alt="${this.selectedCamera.name}" />`;
   }
 
   static get properties() {
@@ -53,7 +71,8 @@ class SurveillanceCard extends LitElement {
       thumbInterval: { type: Number },
       updateInterval: { type: Number },
       recordingDuration: { type: Number },
-      showCaptureButtons: { type: Boolean }
+      showCaptureButtons: { type: Boolean },
+      liveStream: { type: Boolean }
     };
   }
 
@@ -86,6 +105,7 @@ class SurveillanceCard extends LitElement {
     this.updateInterval = config.update_interval || 1.0;
     this.recordingDuration = config.recording_duration || 10.0;
     this.showCaptureButtons = config.show_capture_buttons !== false;
+    this.liveStream = config.camera_view === "live";
 
     // There must be better way to tell if HA front end running from app or browser
     // Confirmed working on iOS, should be verified on Android app
