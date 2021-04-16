@@ -309,7 +309,7 @@ class SurveillanceCard extends LitElement {
       .snapshot{
         width: 60px;
         height: 60px;
-        background-image: url(/local/surveillance-card/snapshot.svg);
+        background-image: url("data:image/svg+xml,%3Csvg width='978' height='978' viewBox='0 0 978 978' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M149.19 228.349H309.698V203.934C309.698 173.415 334.079 149 364.556 149H489H613.445C643.921 149 668.302 173.415 668.302 203.934V228.349H828.81C870.46 228.349 905 262.937 905 304.646V719.703C905 761.412 870.46 796 828.81 796H489H149.19C107.54 796 73 761.412 73 719.703V304.646C73 261.92 107.54 228.349 149.19 228.349ZM768 352V310H833V352H768ZM335 500.5C335 415.869 404.094 347 489 347C573.906 347 643 415.869 643 500.5C643 585.131 573.906 654 489 654C404.094 654 335 585.131 335 500.5Z' fill='url(%23paint0_linear)'/%3E%3Cdefs%3E%3ClinearGradient id='paint0_linear' x1='906.016' y1='484.708' x2='72.9999' y2='489.78' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0.493878' stop-color='%23F2FDFF'/%3E%3Cstop offset='0.509435' stop-color='%23FAFEFF'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E%0A");
         display: inline-block;
         background-repeat: no-repeat;
         background-size: 60% 60%;
@@ -325,7 +325,7 @@ class SurveillanceCard extends LitElement {
       .record{
         width: 60px;
         height: 60px;
-        background-image: url(/local/surveillance-card/record.svg);
+        background-image: url("data:image/svg+xml,%3Csvg width='512' height='512' viewBox='0 0 512 512' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M471.28 120.129L386 196.769V313.089L471.12 391.488C477.6 397.504 487.728 397.121 493.728 390.641C496.464 387.697 497.984 383.825 498 379.809V132.129C498.064 123.297 490.96 116.081 482.128 116.001C478.128 115.969 474.256 117.441 471.28 120.129Z' fill='%23F2FDFF'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M386 160C386 124.656 357.344 96 322 96H202H82C46.656 96 18 124.656 18 160V352C18 387.344 46.656 416 82 416H202H322C357.344 416 386 387.344 386 352V160ZM122 255.5C122 211.669 157.893 176 202 176C246.107 176 282 211.669 282 255.5C282 299.331 246.107 335 202 335C157.893 335 122 299.331 122 255.5Z' fill='%23FAFEFF'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M322 96C357.344 96 386 124.656 386 160V352C386 387.344 357.344 416 322 416H202V335C246.107 335 282 299.331 282 255.5C282 211.669 246.107 176 202 176V96H322Z' fill='%23F2FDFF'/%3E%3C/svg%3E%0A");
         display: inline-block;
         background-repeat: no-repeat;
         background-size: 60% 60%;
