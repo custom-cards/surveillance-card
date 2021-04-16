@@ -24,7 +24,6 @@ class SurveillanceCard extends LitElement {
         <div class="thumbs">
           ${this.cameras.filter((c) => c.access_token).map((camera) => {
               let thumbClass = camera.has_motion ? "thumb motion" : "thumb";
-              let toolbarClass = this.showCaptureButtons ? "" : "hidden";
 
               return html`
                 <div class="${thumbClass}" @click="${() => this._updateSelectedCamera(camera)}">
