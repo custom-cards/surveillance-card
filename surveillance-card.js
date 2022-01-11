@@ -114,12 +114,16 @@ class SurveillanceCard extends LitElement {
     this.cameras = config.cameras.map((camera) => {
       const entity = this.hass && hass.states[camera.entity];
       const attributes = entity && entity.attributes;
+      let motionEntities = camera.motion_entity;
+      if (!Array.isArray(motionEntities)) {
+        motionEntities = [motionEntities];
+      }
       return {
         access_token: attributes && attributes.access_token,
         entity: camera.entity,
-        motion_entity: camera.motion_entity,
+        motion_entities: motionEntities,
         name: attributes && attributes.friendly_name,
-        has_motion: this.hass && this.hass.states[camera.motion_entity].state === "on",
+        has_motion: this.hass && motionEntities.some(e => this.hass.states[e].state === "on" ),
         last_motion: now,
         last_update: now,
         stream_url: "",
@@ -137,8 +141,8 @@ class SurveillanceCard extends LitElement {
 
     for (const camera of this.cameras) {
       const hadMotion = camera.has_motion === true;
-      const { motion_entity } = camera;
-      camera.has_motion = motion_entity in states && states[motion_entity].state === "on";
+      const { motion_entities } = camera;
+      camera.has_motion = motion_entities.some(e => this.hass.states[e].state === "on" );
       if (camera.has_motion) {
         camera.last_motion = now;
       }

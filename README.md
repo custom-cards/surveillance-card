@@ -23,7 +23,7 @@ Each entry in the camera list takes the following options
 
 | Name | Type | Description | Default
 | ---- | ---- | ----------- | -------
-| entity | string | Camera entity_id | **Required**
+| entity | string or array | Camera entity_id | **Required**
 | motion_entity | string | entity_id of a binary sensor to use for motion detection (_uses state=='on' as motion detected_) | none
 
 ## Installation
@@ -85,6 +85,29 @@ Clicking the *record button* will grab as many images as it can (based on the up
 
 Note: This functionality is not available in native app versions (iOS & Android) and depends on the browser/device's ability to download image files.
 
+## Motion entities
+
+Cameras can automatically be set to foccussed when motion is detected from the associated motion entities.
+
+`motion_entity` can either be a single entity ID or a list of multiple entity IDs.
+
+Note: The entities don't necessarily need to be motion sensors, they just need to be a binary sensor that is triggered when in the "on" state. E.g. a door sensor could also be used.
+
+```yaml
+views:
+  - title: Surveillance
+    icon: mdi:cctv
+    cards:
+      - type: custom:surveillance-card
+        cameras:
+          - entity: camera.front_porch
+            motion_entity: binary_sensor.front_porch_motion
+          - entity: camera.back_yard
+            motion_entity:
+            - binary_sensor.back_yard_motion
+            - binary_sensor.back_yard_gate
+
+```
 
 ## Thanks
 
