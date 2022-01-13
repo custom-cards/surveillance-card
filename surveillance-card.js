@@ -20,7 +20,7 @@ class SurveillanceCard extends LitElement {
     const showToolbarClass = ( !this.isMobileApp && this.showCaptureButtons ) ? "" : "hidden";
 
     return html`
-      <div class="container">
+    <div class="container thumbs-${this.thumbPosition}">
         <div class="thumbs">
           ${this.cameras.filter((c) => c.access_token).map((camera) => {
               let thumbClass = camera.has_motion ? "thumb motion" : "thumb";
@@ -68,6 +68,7 @@ class SurveillanceCard extends LitElement {
       selectedCamera: { type: Object },
       focusOnMotion: { type: Boolean },
       thumbInterval: { type: Number },
+      thumbPosition: { type: String },
       updateInterval: { type: Number },
       recordingDuration: { type: Number },
       showCaptureButtons: { type: Boolean },
@@ -105,6 +106,7 @@ class SurveillanceCard extends LitElement {
     this.recordingDuration = config.recording_duration || 10.0;
     this.showCaptureButtons = config.show_capture_buttons !== false;
     this.liveStream = config.camera_view === "live";
+    this.thumbPosition = config.thumb_position || "left";
 
     // There must be better way to tell if HA front end running from app or browser
     // Confirmed working on iOS, should be verified on Android app
@@ -233,6 +235,33 @@ class SurveillanceCard extends LitElement {
         overflow-y: auto;
         position: relative;
         text-align:center;
+      }
+
+      .container.thumbs-left {
+
+      }
+      .container.thumbs-right {
+        flex-direction: row-reverse;
+      }
+
+      .container.thumbs-top {
+        flex-direction: column;
+      }
+      .container.thumbs-top .thumbs {
+        display: flex;
+        flex: unset;
+      }
+
+      .container.thumbs-bottom {
+        flex-direction: column-reverse;
+      }
+      .container.thumbs-bottom .thumbs {
+        display: flex;
+        flex: unset;
+      }
+
+      .container.thumbs-none .thumbs {
+        display: none;
       }
 
       .thumb > img {

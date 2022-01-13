@@ -16,6 +16,7 @@ Custom component for lovelace to be used as a panel for viewing security cameras
 | recording_duration | number | Number of seconds to record after clicking record button (_min_ 0.5) | 10
 | focus_motion | boolean | Switch to camera when motion detected | true
 | camera_view | string | “live” will show the live view if  the `stream` integration is enabled. | ""
+| thumb_position | string | Position of the thumbnails (left, right, top, botton, none) | left
 
 ### Camera configuration
 
