@@ -5,6 +5,8 @@ Surveillance Card is a custom component for lovelace to be used as a panel for v
 ![Apache 2.0](https://img.shields.io/github/license/custom-cards/surveillance-card?color=blue&style=for-the-badge)
 ![hacs_badge](https://img.shields.io/badge/HACS-Default-blue.svg?style=for-the-badge)
 
+![Screenshot](/surveillancecard.png)
+
 ---
 
 ## Configuration Parameters
