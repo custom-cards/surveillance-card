@@ -20,7 +20,7 @@ class SurveillanceCard extends LitElement {
     const showToolbarClass = ( !this.isMobileApp && this.showCaptureButtons ) ? "" : "hidden";
 
     return html`
-    <div class="container thumbs-${this.thumbPosition}">
+      <div class="container thumbs-${this.thumbPosition}">
         <div class="thumbs">
           ${this.cameras.filter((c) => c.access_token).map((camera) => {
               let thumbClass = camera.has_motion ? "thumb motion" : "thumb";
@@ -49,7 +49,7 @@ class SurveillanceCard extends LitElement {
       if (!cameraObj) {
         return html``;
       }
-      
+
       return html`
         <ha-camera-stream
           .hass=${this.hass}
@@ -57,7 +57,7 @@ class SurveillanceCard extends LitElement {
         ></ha-camera-stream>
       `;
     }
-    
+
     return html`<img src="${this.selectedCamera.stream_url}" alt="${this.selectedCamera.name}" />`;
   }
 
@@ -216,7 +216,7 @@ class SurveillanceCard extends LitElement {
         cameraThumbContainer.classList.remove("recording");
         clearInterval(snapshotInterval);
       }
-    
+
     }, this.thumbInterval);
   }
 
@@ -238,8 +238,8 @@ class SurveillanceCard extends LitElement {
       }
 
       .container.thumbs-left {
-
       }
+
       .container.thumbs-right {
         flex-direction: row-reverse;
       }
@@ -247,6 +247,7 @@ class SurveillanceCard extends LitElement {
       .container.thumbs-top {
         flex-direction: column;
       }
+
       .container.thumbs-top .thumbs {
         display: flex;
         flex: unset;
@@ -255,6 +256,7 @@ class SurveillanceCard extends LitElement {
       .container.thumbs-bottom {
         flex-direction: column-reverse;
       }
+
       .container.thumbs-bottom .thumbs {
         display: flex;
         flex: unset;
@@ -349,7 +351,7 @@ class SurveillanceCard extends LitElement {
         border: 1px solid var(--primary-color);
         margin-right:4px;
       }
-      
+
       .record{
         width: 60px;
         height: 60px;
