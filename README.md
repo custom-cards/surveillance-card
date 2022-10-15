@@ -1,10 +1,16 @@
-Custom component for lovelace to be used as a panel for viewing security cameras. It shows all of the cameras on the left, and shows a big one with motion on the right.
+# Surveillance Card
+
+Surveillance Card is a custom component for lovelace to be used as a panel for viewing security cameras. It shows all of the cameras on the left, and shows a big one with motion on the right.
+
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/custom-cards/surveillance-card?color=green&display_name=tag&style=for-the-badge)
+![Apache 2.0](https://img.shields.io/github/license/custom-cards/surveillance-card?color=blue&style=for-the-badge)
+![hacs_badge](https://img.shields.io/badge/HACS-Default-blue.svg?style=for-the-badge)
+
 ![Screenshot](/surveillancecard.png)
 
+---
 
-**Note: When including this file in your `ui-lovelace.yaml` you must use `type: module`**
-
-## Config
+## Configuration Parameters
 
 | Name | Type | Description | Default
 | ---- | ---- | ----------- | -------
@@ -16,8 +22,9 @@ Custom component for lovelace to be used as a panel for viewing security cameras
 | recording_duration | number | Number of seconds to record after clicking record button (_min_ 0.5) | 10
 | focus_motion | boolean | Switch to camera when motion detected | true
 | camera_view | string | “live” will show the live view if  the `stream` integration is enabled. | ""
+| thumb_position | string | Position of the thumbnails (left, right, top, bottom, none) | left
 
-### Camera configuration
+### Camera Parameters
 
 Each entry in the camera list takes the following options
 
@@ -26,62 +33,51 @@ Each entry in the camera list takes the following options
 | entity | string or array | Camera entity_id | **Required**
 | motion_entity | string | entity_id of a binary sensor to use for motion detection (_uses state=='on' as motion detected_) | none
 
-## Installation
+---
 
-### Step 1
+## Install Using HACS
 
-Install `surveillance-card` by copying `surveillance-card.js`, `record.svg`, and `snapshot.svg` from this repo to `<config directory>/www/surveillance-card/` on your Home Assistant instance.
+### Simple Install (Requires Core 2022.8 or newer)
 
-**Example:**
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://img.shields.io/badge/HACS-Install-blue?style=for-the-badge)](https://my.home-assistant.io/redirect/hacs_repository/?owner=custom-cards&repository=custom-cards%2Fsurveillance-card)
 
-```bash
-mkdir <config directory>/www/surveillance-card/
-cd <config directory>/www/surveillance-card/
+### Manually Install through HACS
 
-wget https://raw.githubusercontent.com/custom-cards/surveillance-card/master/surveillance-card.js
-wget https://raw.githubusercontent.com/custom-cards/surveillance-card/master/record.svg
-wget https://raw.githubusercontent.com/custom-cards/surveillance-card/master/snapshot.svg
-```
+1. Make sure you have the latest version of HACS installed. [HACS install guide](https://hacs.xyz/docs/setup/prerequisites)
+2. Log in as an Admin and go to HACS > Frontend > Explore and Download Repositories > Search for "surveillance-card" and select it from the list
+3. Click download on the bottom right
+4. Reload your browser when prompted
 
-### Step 2
+### Add Card To Dashboard
 
-Link `surveillance-card` inside you `ui-lovelace.yaml`.
+> **Note** For the page you create, make sure to set the View Type to "Panel (1 card)"
+
+1. Create a new dashboard or select the dashboard you wish to use (must be a UI configured dashboard, use 3b for YAML)
+2. Click the menu button (top right 3 dots) and select edit
+3. Add a "Manual Card" to your screen
+4. Fill out options like the example below
 
 ```yaml
-resources:
-  - url: /local/surveillance-card.js?v=0
-    type: module
+type: custom:surveillance-card
+thumb_interval: 15
+update_interval: 2
+recording_duration: 10
+show_capture_buttons: true
+camera_view: ""
+cameras:
+  - entity: camera.front_porch
+    motion_entity: binary_sensor.front_porch_motion
+  - entity: camera.back_yard
+    motion_entity: binary_sensor.back_yard_motion
 ```
 
-### Step 3
-
-Add as custom card of a panel view in your `ui-lovelace.yaml` using `type: custom:surveillance-card`
-
-## Example
-```yaml
-views:
-  - title: Surveillance
-    icon: mdi:cctv
-    panel: true
-    cards:
-      - type: custom:surveillance-card
-        thumb_interval: 15
-        update_interval: 2
-        recording_duration: 10
-        show_capture_buttons: true
-        cameras:
-          - entity: camera.front_porch
-            motion_entity: binary_sensor.front_porch_motion
-          - entity: camera.back_yard
-            motion_entity: binary_sensor.back_yard_motion
-          - entity: camera.driveway
-```
+---
 
 ## Saving Snapshots from Cameras
 
-Clicking on the *camera button* will save a single snapshot from that camera.
+Clicking on the _camera button_ will save a single snapshot from that camera.
 
-Clicking the *record button* will grab as many images as it can (based on the update intervals) for the set `recording_duration`
+Clicking the _record button_ will grab as many images as it can (based on the update intervals) for the set `recording_duration`
 
 Note: This functionality is not available in native app versions (iOS & Android) and depends on the browser/device's ability to download image files.
 
