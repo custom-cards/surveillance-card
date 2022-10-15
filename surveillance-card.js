@@ -114,18 +114,21 @@ class SurveillanceCard extends LitElement {
 
     const now = Date.now();
     this.cameras = config.cameras.map((camera) => {
-      const entity = this.hass && hass.states[camera.entity];
-      const attributes = entity && entity.attributes;
+      const { states } = this.hass || {};
+      const entity = states[camera.entity];
+      const attributes = entity?.attributes;
+      const motionEntities = Array.isArray(camera.motion_entity) ? camera.motion_entity : [camera.motion_entity].filter(entityId => !!entityId);
+
       return {
-        access_token: attributes && attributes.access_token,
+        access_token: attributes?.access_token,
         entity: camera.entity,
-        motion_entity: camera.motion_entity,
-        name: attributes && attributes.friendly_name,
-        has_motion: this.hass && this.hass.states[camera.motion_entity].state === "on",
+        motion_entities: motionEntities,
+        name: attributes?.friendly_name,
+        has_motion: motionEntities.some(entityId => states[entityId]?.state === "on"),
         last_motion: now,
         last_update: now,
         stream_url: "",
-        url: attributes && attributes.entity_picture,
+        url: attributes?.entity_picture,
       };
     });
     this.updateCameras = this.throttle(() => this._updateCameras(), this.thumbInterval);
@@ -134,13 +137,13 @@ class SurveillanceCard extends LitElement {
 
   _updateCameras() {
     const now = Date.now();
-    const { states } = this.hass;
+    const { states } = this.hass || {};
     const activatedCameras = [];
 
     for (const camera of this.cameras) {
       const hadMotion = camera.has_motion === true;
-      const { motion_entity } = camera;
-      camera.has_motion = motion_entity in states && states[motion_entity].state === "on";
+      const { motion_entities } = camera;
+      camera.has_motion = motion_entities.some(entityId => states[entityId]?.state === "on");
       if (camera.has_motion) {
         camera.last_motion = now;
       }
@@ -155,7 +158,7 @@ class SurveillanceCard extends LitElement {
         camera.last_update = now;
       }
 
-      const attributes = camera.entity in states ? states[camera.entity].attributes || {} : {};
+      const attributes = states[camera.entity]?.attributes || {};
       camera.access_token = attributes.access_token;
       camera.name = attributes.friendly_name;
       camera.url = `${attributes.entity_picture}&last_update=${camera.last_update}`;
