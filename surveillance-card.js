@@ -117,7 +117,7 @@ class SurveillanceCard extends LitElement {
       const { states } = this.hass || {};
       const entity = states[camera.entity];
       const attributes = entity?.attributes;
-      const motionEntities = Array.isArray(camera.motion_entity) ? camera.motion_entity : [camera.motion_entity];
+      const motionEntities = Array.isArray(camera.motion_entity) ? camera.motion_entity : [camera.motion_entity].filter(entityId => !!entityId);
 
       return {
         access_token: attributes?.access_token,
