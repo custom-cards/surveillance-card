@@ -114,7 +114,7 @@ class SurveillanceCard extends LitElement {
 
     const now = Date.now();
     this.cameras = config.cameras.map((camera) => {
-      const { states } = this.hass || {};
+      const { states = {} } = this.hass || {};
       const entity = states[camera.entity];
       const attributes = entity?.attributes;
       const motionEntities = Array.isArray(camera.motion_entity) ? camera.motion_entity : [camera.motion_entity].filter(entityId => !!entityId);
@@ -137,7 +137,7 @@ class SurveillanceCard extends LitElement {
 
   _updateCameras() {
     const now = Date.now();
-    const { states } = this.hass || {};
+    const { states = {} } = this.hass || {};
     const activatedCameras = [];
 
     for (const camera of this.cameras) {
