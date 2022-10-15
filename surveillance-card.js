@@ -143,7 +143,7 @@ class SurveillanceCard extends LitElement {
     for (const camera of this.cameras) {
       const hadMotion = camera.has_motion === true;
       const { motion_entities } = camera;
-      camera.has_motion = motion_entities.some(entityId => entityId in states[entityId]?.state === "on");
+      camera.has_motion = motion_entities.some(entityId => states[entityId]?.state === "on");
       if (camera.has_motion) {
         camera.last_motion = now;
       }
