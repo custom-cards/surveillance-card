@@ -39,7 +39,7 @@ Each entry in the camera list takes the following options
 
 ### Simple Install (Requires Core 2022.8 or newer)
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://img.shields.io/badge/HACS-Install-blue?style=for-the-badge)](https://my.home-assistant.io/redirect/hacs_repository/?owner=custom-cards&repository=custom-cards%2Fsurveillance-card)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://img.shields.io/badge/HACS-Install-blue?style=for-the-badge)](https://my.home-assistant.io/redirect/hacs_repository/?owner=custom-cards&repository=surveillance-card)
 
 ### Manually Install through HACS
 
